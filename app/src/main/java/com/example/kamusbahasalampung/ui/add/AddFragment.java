@@ -1,5 +1,6 @@
 package com.example.kamusbahasalampung.ui.add;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,6 +73,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
 
     void SimpanDataIstilah(View view) {
+
+
         String bahasa_indonesia = Bhs_indo.getText().toString();
         String bahasa_lampung = Bhs_lamp.getText().toString();
         String dialek = spinner.getSelectedItem().toString();
@@ -95,15 +98,24 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             return;
         }
 
+        ProgressDialog progress = new ProgressDialog(getActivity());
+        progress.setTitle("Loading");
+        progress.setMessage("Sedang menyimpan data...");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
+
         fb.child("Data").child(getRandomString(32)).setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(getActivity(), "Text!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Data Berhasil disimpan!", Toast.LENGTH_SHORT).show();
+                progress.dismiss();
+                getFragmentManager().popBackStack();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), "Text!", Toast.LENGTH_SHORT).show();
+                progress.dismiss();
+                Toast.makeText(getActivity(), "Gagal Disimpan!", Toast.LENGTH_SHORT).show();
             }
         });
     }

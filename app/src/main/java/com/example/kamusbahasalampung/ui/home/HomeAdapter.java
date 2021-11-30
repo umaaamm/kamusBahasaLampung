@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import android.widget.Filter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
@@ -30,11 +31,14 @@ public class HomeAdapter extends
 
     class ExampleViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView textView2;
+        TextView textView2, textView3, textView4;
+        String keyFB;
         ExampleViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.gambar_view);
-            textView2 = itemView.findViewById(R.id.text_hasil);
+            imageView = itemView.findViewById(R.id.imageView2);
+            textView2 = itemView.findViewById(R.id.hsl_lampung);
+            textView3 = itemView.findViewById(R.id.hsl_indonesia);
+            textView4 = itemView.findViewById(R.id.hsl_dialek);
         }
     }
 
@@ -54,6 +58,9 @@ public class HomeAdapter extends
         DataItem currentItem = exampleList.get(position);
         holder.imageView.setImageResource(currentItem.getImageResource());
         holder.textView2.setText(currentItem.getText2());
+        holder.textView3.setText(currentItem.getText3());
+        holder.textView4.setText(currentItem.getText4());
+        holder.keyFB = currentItem.getKeyFB();
     }
     @Override
     public int getItemCount() {
