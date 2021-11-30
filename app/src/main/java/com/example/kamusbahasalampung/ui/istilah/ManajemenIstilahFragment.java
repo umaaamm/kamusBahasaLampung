@@ -1,5 +1,7 @@
 package com.example.kamusbahasalampung.ui.istilah;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +20,6 @@ import com.example.kamusbahasalampung.MainActivity;
 import com.example.kamusbahasalampung.R;
 import com.example.kamusbahasalampung.ui.add.AddFragment;
 
-import com.example.kamusbahasalampung.ui.edit.*;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +35,8 @@ public class ManajemenIstilahFragment extends Fragment {
     View root;
     private HomeAdapterIstilah adapter;
     private List<DataItemIstilah> exampleList=new ArrayList<>();
+    FragmentManager fm;
+    private Dialog customDialog;
 
     DatabaseReference fb = FirebaseDatabase.getInstance().getReference().child("Data");
 
@@ -44,7 +48,8 @@ public class ManajemenIstilahFragment extends Fragment {
                     String bahasa_lampung= ds.child("bahasa_lampung").getValue().toString();
                     String bahasa_indonesia= ds.child("bahasa_indonesia").getValue().toString();
                     String dialek= ds.child("dialek").getValue().toString();
-                    DataItemIstilah item=new DataItemIstilah(R.drawable.ic_baseline_book_24,bahasa_lampung, bahasa_indonesia,dialek);
+                    String key = ds.getKey().toString();
+                    DataItemIstilah item=new DataItemIstilah(R.drawable.ic_baseline_book_24,bahasa_lampung, bahasa_indonesia,dialek,key);
                     exampleList.add(item);
                 }
 
@@ -65,19 +70,33 @@ public class ManajemenIstilahFragment extends Fragment {
     }
 
 
-    public void GotoEdit(String bhs_indo, String bhs_lampung, String dialek){
-        Bundle bundle = new Bundle();
-        bundle.putString("bhs_indo", bhs_indo);
-        bundle.putString("bhs_lampung", bhs_lampung);
-        bundle.putString("dialek", dialek);
-        EditFragment editFragment = new EditFragment();
-        editFragment.setArguments(bundle);
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.nav_host_fragment, editFragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
+    public void EditData(String bhs_indo, String bhs_lampung, String dialek, String key){
+        Query applesQuery = fb.orderByKey().equalTo(key);
+        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot datas : dataSnapshot.getChildren()) {
+                        String key =datas.getKey();
+                        fb.child(key).child("bahasa_lampung").setValue(bhs_lampung);
+                        fb.child(key).child("bahasa_indonesia").setValue(bhs_indo);
+                        fb.child(key).child("dialek").setValue(dialek);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.i("TAG", "onCancelled", databaseError.toException());
+            }
+
+        });
+
     }
+
+
+
+
 
 
     public void HapusData(String id){
@@ -112,6 +131,7 @@ public class ManajemenIstilahFragment extends Fragment {
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.addToBackStack(null);
                 ft.commit();
+
             }
         });
 
@@ -132,5 +152,11 @@ public class ManajemenIstilahFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        fm = getFragmentManager();
     }
 }
