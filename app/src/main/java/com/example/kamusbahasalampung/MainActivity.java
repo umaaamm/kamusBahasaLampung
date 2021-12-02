@@ -3,18 +3,24 @@ package com.example.kamusbahasalampung;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.example.kamusbahasalampung.ui.add.AddFragment;
 import com.example.kamusbahasalampung.ui.edit.EditFragment;
 import com.example.kamusbahasalampung.ui.home.HomeFragment;
 import com.example.kamusbahasalampung.ui.istilah.HomeAdapterIstilah;
 import com.example.kamusbahasalampung.ui.istilah.ManajemenIstilahFragment;
+import com.example.kamusbahasalampung.ui.login.ActivityLogin;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Logger;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -28,9 +34,9 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private Dialog customDialog;
     HomeAdapterIstilah mAdapter;
     Context mContext;
+    private TextView kataKamus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         mAdapter = new HomeAdapterIstilah(mContext);
 
+        kataKamus = (TextView) findViewById(R.id.idKataKamus);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -52,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
+    }
+
+    void LogoutAction(MenuItem item) {
+
     }
 
     @Override

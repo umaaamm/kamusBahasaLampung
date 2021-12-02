@@ -39,7 +39,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         Bhs_indo = root.findViewById(R.id.editTextBahasaIndo);
         Bhs_lamp = root.findViewById(R.id.editTextBahasaLampung);
-        ButtonSimpan = root.findViewById(R.id.buttonSimpan);
+        ButtonSimpan = root.findViewById(R.id.buttonLogin);
 
         fb = FirebaseDatabase.getInstance().getReference();
         spinner = (Spinner)root.findViewById(R.id.spinner);
