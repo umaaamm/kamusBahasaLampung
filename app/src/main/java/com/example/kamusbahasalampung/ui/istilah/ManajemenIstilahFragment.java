@@ -95,11 +95,6 @@ public class ManajemenIstilahFragment extends Fragment {
             return;
         }
 
-        ProgressDialog progress = new ProgressDialog(getActivity());
-        progress.setTitle("Loading");
-        progress.setMessage("Sedang mengupdate data...");
-        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-        progress.show();
         Query applesQuery = fb.orderByKey().equalTo(key);
         applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -111,14 +106,11 @@ public class ManajemenIstilahFragment extends Fragment {
                         fb.child(key).child("bahasa_indonesia").setValue(bhs_indo);
                         fb.child(key).child("dialek").setValue(dialek);
                     }
-
-                    progress.dismiss();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                progress.dismiss();
                 Log.i("TAG", "onCancelled", databaseError.toException());
             }
 
@@ -127,26 +119,17 @@ public class ManajemenIstilahFragment extends Fragment {
     }
 
     public void HapusData(String id) {
-        ProgressDialog progress = new ProgressDialog(getActivity());
-        progress.setTitle("Loading");
-        progress.setMessage("Sedang menghapus data...");
-        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-        progress.show();
         Query applesQuery = fb.orderByChild("bahasa_lampung").equalTo(id);
-
         applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     appleSnapshot.getRef().removeValue();
                 }
-
-                progress.dismiss();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                progress.dismiss();
                 Log.i("TAG", "onCancelled", databaseError.toException());
             }
         });

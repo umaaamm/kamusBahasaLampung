@@ -34,15 +34,11 @@ public class ActivityLogin extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         emailTxt = (EditText) findViewById(R.id.id_email);
-
         passwordTxt = (EditText) findViewById(R.id.password);
-
         login = (Button) findViewById(R.id.buttonLogin);
-
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
-
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {

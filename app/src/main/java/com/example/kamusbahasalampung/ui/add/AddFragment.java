@@ -15,8 +15,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.kamusbahasalampung.R;
+import com.example.kamusbahasalampung.ui.istilah.ManajemenIstilahFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -73,8 +75,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
 
     void SimpanDataIstilah(View view) {
-
-
         String bahasa_indonesia = Bhs_indo.getText().toString();
         String bahasa_lampung = Bhs_lamp.getText().toString();
         String dialek = spinner.getSelectedItem().toString();
@@ -109,7 +109,13 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(getActivity(), "Data Berhasil disimpan!", Toast.LENGTH_SHORT).show();
                 progress.dismiss();
-                getFragmentManager().popBackStack();
+                //move to istilah
+                ManajemenIstilahFragment manajemenIstilahFragment = new ManajemenIstilahFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.nav_host_fragment, manajemenIstilahFragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.addToBackStack(null);
+                ft.commit();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

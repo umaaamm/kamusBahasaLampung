@@ -2,11 +2,14 @@ package com.example.kamusbahasalampung;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.kamusbahasalampung.ui.add.AddFragment;
@@ -36,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     HomeAdapterIstilah mAdapter;
     Context mContext;
-    private TextView kataKamus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         mContext = this;
         mAdapter = new HomeAdapterIstilah(mContext);
-
-        kataKamus = (TextView) findViewById(R.id.idKataKamus);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                 .setDrawerLayout(drawer)
@@ -60,11 +61,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        Menu menu =navigationView.getMenu();
 
-    }
+        MenuItem target = menu.findItem(R.id.nav_gallery);
 
-    void LogoutAction(MenuItem item) {
-
+        if (FirebaseAuth.getInstance().getCurrentUser() == null){
+            target.setVisible(false);
+        }
     }
 
     @Override

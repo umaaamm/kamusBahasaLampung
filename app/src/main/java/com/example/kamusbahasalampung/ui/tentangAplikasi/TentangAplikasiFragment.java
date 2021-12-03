@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class TentangAplikasiFragment extends Fragment {
 
    private Button btnKeluar, btnSendMail;
+   private ImageButton btnLogin;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -31,12 +33,24 @@ public class TentangAplikasiFragment extends Fragment {
 
         btnKeluar = (Button) root.findViewById(R.id.buttonKeluar);
         btnSendMail = (Button) root.findViewById(R.id.emailAdminBtn);
+        btnLogin = (ImageButton) root.findViewById(R.id.imageButtonLoginTentang);
         btnKeluar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getActivity(), "Selamat anda berhasil keluar dari aplikasi.", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getActivity(), ActivityLogin.class));
+                startActivity(new Intent(getActivity(), MainActivity.class));
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    startActivity(new Intent(getActivity(), ActivityLogin.class));
+                }else {
+                    Toast.makeText(getActivity(), "Anda Sudah Login.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -46,6 +60,10 @@ public class TentangAplikasiFragment extends Fragment {
                 composeEmail();
             }
         });
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null){
+            btnKeluar.setVisibility(View.GONE);
+        }
 
         return root;
     }

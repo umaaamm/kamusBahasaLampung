@@ -96,6 +96,7 @@ public class HomeAdapterIstilah extends
         holder.btnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refresh();
                 ManajemenIstilahFragment manajemenIstilahFragment = new ManajemenIstilahFragment();
                 manajemenIstilahFragment.HapusData(currentItem.getText2());
             }
@@ -147,9 +148,10 @@ public class HomeAdapterIstilah extends
                 ButtonEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        refresh();
                         ManajemenIstilahFragment manajemenIstilahFragment = new ManajemenIstilahFragment();
                         manajemenIstilahFragment.EditData(Bhs_lamp_edit.getText().toString(), Bhs_indo_edit.getText().toString(), spinner.getSelectedItem().toString(), currentItem.getKeyFB());
-                        refresh();
+
                         customDialog.dismiss();
                     }
                 });
